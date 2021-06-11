@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  jira:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jira-db-test
+    depends_on:
+      - database
+    networks:
+      - jira-bridge
+    ports:
+      - "8080:8080"
+    volumes:
+      - jira-db-data:/var/atlassian/application-data/jira
+  database:
+    image: oracle/database:19.3.0-ee
+    container_name: database-test
+    networks:
+      - jira-bridge
+    healthcheck:
+      test: ["CMD-SHELL", "if [ \"`echo \\\"SELECT ACCOUNT_STATUS FROM DBA_USERS WHERE USERNAME = 'ANONYMOUS' AND ACCOUNT_STATUS = 'EXPIRED';\\\"|/u01/app/oracle/product/19.3.0/ee/bin/sqlplus -S sys/Oradoc_db1 as sysdba|grep ACCOUNT_STATUS`\" = \"ACCOUNT_STATUS\" ];then true;else false;fi"]
+      interval: 30s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - database-data:/opt/oracle/oradata
+      - ./db_scripts/:/docker-entrypoint-initdb.d/setup
+    environment:
+      ORACLE_PWD: 'Oradoc_db1'
+      ORACLE_CHARACTERSET: 'AL32UTF8'
+      ENABLE_ARCHIVELOG: 'true'
+    ports:
+      - '1521'
+networks:
+  jira-bridge:
+    driver: bridge
+
+volumes:
+  jira-db-data:
+    external: false
+  database-data:
+    external: false

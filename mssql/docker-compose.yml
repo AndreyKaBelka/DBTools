@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  jira:
+    image: atlassian/jira-software:8.16
+    container_name: jira-db-test
+    depends_on:
+      - database
+    networks:
+      - jira-bridge
+    ports:
+      - "8080:8080"
+    volumes:
+      - jira-db-data:/var/atlassian/application-data/jira
+  database:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      ACCEPT_EULA: y
+      SA_PASSWORD: Qwerty01!
+      MSSQL_PID: Enterprise
+    networks:
+      - jira-bridge
+    container_name: database-test
+    volumes:
+      - database-data:/var/opt/mssql
+      - ./db_scripts/:/scripts/
+      - ./entrypoint.sh:/entrypoint/entrypoint.sh
+    entrypoint: /bin/bash /entrypoint/entrypoint.sh
+
+networks:
+  jira-bridge:
+    driver: bridge
+
+volumes:
+  jira-db-data:
+    external: false
+  database-data:
+    external: false

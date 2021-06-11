@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  jira:
+    image: atlassian/jira-software:8.16
+    container_name: jira-db-test
+    depends_on:
+      - database
+    networks:
+      - jira-bridge
+    ports:
+      - "8080:8080"
+    volumes:
+      - jira-db-data:/var/atlassian/application-data/jira
+  database:
+    image: postgres:11
+    environment:
+      POSTGRES_PASSWORD: Qwerty01!
+    networks:
+      - jira-bridge
+    container_name: database-test
+    volumes:
+      - database-data:/var/lib/postgresql/data
+      - ./db_scripts:/docker-entrypoint-initdb.d/
+
+
+networks:
+  jira-bridge:
+    driver: bridge
+
+volumes:
+  jira-db-data:
+    external: false
+  database-data:
+    external: false
