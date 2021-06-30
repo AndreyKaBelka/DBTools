@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/mssql/db_scripts/entrypoint.sql" dialect="TSQL" />
-    <file url="file://$PROJECT_DIR$/mysql/db_scripts/entrypoint.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/oracle/db_scripts/entrypoint.sql" dialect="OracleSqlPlus" />
-    <file url="file://$PROJECT_DIR$/postgres/db_scripts/entrypoint.sql" dialect="PostgreSQL" />
-  </component>
-</project>
