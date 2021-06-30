@@ -1,11 +1,6 @@
-#!/usr/bin/zsh
+#!/usr/bin/env bash
 
-set -a
-
-DOCKER_PATH=""
-COMMAND=""
-JIRA_VERSION=8.14
-CURRENT_PATH=$PWD
+source ./settings.sh
 
 function remove_containers() {
   if [[ -n $DOCKER_PATH ]]; then
@@ -26,19 +21,23 @@ fi
 while getopts "msophd" OPTION; do
   case $OPTION in
   m)
-    DOCKER_PATH="/mysql/"
+    export DOCKER_PATH="/mysql/"
+    export PORT=3306
     ;;
   s)
-    DOCKER_PATH="/mssql/"
+    export DOCKER_PATH="/mssql/"
+    export PORT=1433
     ;;
   o)
-    DOCKER_PATH="/oracle/"
+    export DOCKER_PATH="/oracle/"
+    export PORT=1521
     ;;
   p)
-    DOCKER_PATH="/postgres/"
+    export DOCKER_PATH="/postgres/"
+    export PORT=1521
     ;;
   d)
-    COMMAND="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    export COMMAND="-Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n"
     ;;
   h)
     echo "Usage:"
@@ -59,10 +58,10 @@ while getopts "msophd" OPTION; do
 done
 
 function main() {
-  CURRENT_PATH="${CURRENT_PATH}${DOCKER_PATH}"
+  export CURRENT_PATH="${CURRENT_PATH}${DOCKER_PATH}"
   cd "$CURRENT_PATH" || exit
-  docker-compose -f ../jira-docker.yml -f docker-compose.yml config > docker-temp.yml
-  docker-compose -f docker-temp.yml up
+  docker-compose -f ../jira-docker.yml -f docker-compose.yml config >docker-temp.yml
+  docker-compose -f docker-temp.yml up --build
 }
 
 main

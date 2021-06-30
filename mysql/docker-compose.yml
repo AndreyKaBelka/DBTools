@@ -1,6 +1,13 @@
 version: "3"
 
 services:
+  jira:
+    environment:
+      ATL_JDBC_URL: jdbc:mysql://address=(protocol=tcp)(host=database)(port=3306)/jiradb?sessionVariables=default_storage_engine=InnoDB
+      ATL_JDBC_USER: jiradbuser
+      ATL_JDBC_PASSWORD: pass
+      ATL_DB_DRIVER: com.mysql.cj.jdbc.Driver
+      ATL_DB_TYPE: mysql8
   database:
     image: mysql:8.0.17
     container_name: database-test
@@ -11,10 +18,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: Qwerty01!
     command: --default-authentication-plugin=mysql_native_password
-    healthcheck:
-      test: ["CMD", "mysql" ,"-uroot", "-p$MYSQL_ROOT_PASSWORD", "-e", "\"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'jiradb';\""]
-      timeout: 5s
-      retries: 12
     networks:
       - jira-bridge
     cap_add:

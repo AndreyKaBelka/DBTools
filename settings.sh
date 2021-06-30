@@ -1,0 +1,2 @@
+export JIRA_VERSION="8.14"
+export CURRENT_PATH=$PWD

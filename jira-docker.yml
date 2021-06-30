@@ -3,8 +3,10 @@ version: '3'
 services:
   jira:
     build:
-      context: $CURRENT_PATH/..
-      dockerfile: Dockerfile
+      context: .
+      args:
+        JIRA_VERSION: ${JIRA_VERSION}
+        PORT: ${PORT}
     container_name: jira-db-test
     depends_on:
       - database
@@ -17,6 +19,7 @@ services:
       - jira-db-data:/var/atlassian/application-data/jira
     environment:
       JVM_SUPPORT_RECOMMENDED_ARGS: ${COMMAND}
+    restart: on-failure
 
 networks:
   jira-bridge:

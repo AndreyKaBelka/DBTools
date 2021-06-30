@@ -2,15 +2,10 @@ version: "3"
 
 services:
   database:
-    image: oracle/database:19.3.0-ee
+    image: oracle/database:19.3.0-se2
     container_name: database-test
     networks:
       - jira-bridge
-    healthcheck:
-      test: ["CMD-SHELL", "if [ \"`echo \\\"SELECT ACCOUNT_STATUS FROM DBA_USERS WHERE USERNAME = 'ANONYMOUS' AND ACCOUNT_STATUS = 'EXPIRED';\\\"|/u01/app/oracle/product/19.3.0/ee/bin/sqlplus -S sys/Oradoc_db1 as sysdba|grep ACCOUNT_STATUS`\" = \"ACCOUNT_STATUS\" ];then true;else false;fi"]
-      interval: 30s
-      timeout: 3s
-      retries: 30
     volumes:
       - database-data:/opt/oracle/oradata
       - $CURRENT_PATH/db_scripts/:/docker-entrypoint-initdb.d/setup
