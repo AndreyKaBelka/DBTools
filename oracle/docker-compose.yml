@@ -1,19 +1,6 @@
 version: "3"
 
 services:
-  jira:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: jira-db-test
-    depends_on:
-      - database
-    networks:
-      - jira-bridge
-    ports:
-      - "8080:8080"
-    volumes:
-      - jira-db-data:/var/atlassian/application-data/jira
   database:
     image: oracle/database:19.3.0-ee
     container_name: database-test
@@ -26,19 +13,10 @@ services:
       retries: 30
     volumes:
       - database-data:/opt/oracle/oradata
-      - ./db_scripts/:/docker-entrypoint-initdb.d/setup
+      - $CURRENT_PATH/db_scripts/:/docker-entrypoint-initdb.d/setup
     environment:
       ORACLE_PWD: 'Oradoc_db1'
       ORACLE_CHARACTERSET: 'AL32UTF8'
       ENABLE_ARCHIVELOG: 'true'
     ports:
       - '1521'
-networks:
-  jira-bridge:
-    driver: bridge
-
-volumes:
-  jira-db-data:
-    external: false
-  database-data:
-    external: false

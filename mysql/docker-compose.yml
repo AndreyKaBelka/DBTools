@@ -1,26 +1,13 @@
 version: "3"
 
 services:
-  jira:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: jira-db-test
-    depends_on:
-      - database
-    networks:
-      - jira-bridge
-    ports:
-      - "8080:8080"
-    volumes:
-      - jira-db-data:/var/atlassian/application-data/jira
   database:
     image: mysql:8.0.17
     container_name: database-test
     volumes:
       - database-data:/var/lib/mysql
-      - ./db_scripts/:/docker-entrypoint-initdb.d/
-      - ./conf:/etc/mysql/conf.d
+      - $CURRENT_PATH/db_scripts/:/docker-entrypoint-initdb.d/
+      - $CURRENT_PATH/conf:/etc/mysql/conf.d
     environment:
       MYSQL_ROOT_PASSWORD: Qwerty01!
     command: --default-authentication-plugin=mysql_native_password
@@ -32,13 +19,3 @@ services:
       - jira-bridge
     cap_add:
       - SYS_NICE
-
-networks:
-  jira-bridge:
-    driver: bridge
-
-volumes:
-  jira-db-data:
-    external: false
-  database-data:
-    external: false

@@ -1,0 +1,40 @@
+networks:
+  jira-bridge:
+    driver: bridge
+services:
+  database:
+    container_name: database-test
+    environment:
+      POSTGRES_PASSWORD: Qwerty01!
+    image: postgres:11
+    networks:
+      jira-bridge: {}
+    volumes:
+    - /home/andrey/ideaProject/databases/postgres/db_scripts:/docker-entrypoint-initdb.d:rw
+    - database-data:/var/lib/postgresql/data:rw
+  jira:
+    build:
+      context: /home/andrey/ideaProject/databases
+      dockerfile: Dockerfile
+    container_name: jira-db-test
+    depends_on:
+      database:
+        condition: service_started
+    environment:
+      JVM_SUPPORT_RECOMMENDED_ARGS: ''
+    networks:
+      jira-bridge: {}
+    ports:
+    - published: 5005
+      target: 5005
+    - published: 8080
+      target: 8080
+    volumes:
+    - jira-db-data:/var/atlassian/application-data/jira:rw
+version: '3'
+volumes:
+  database-data:
+    external: false
+  jira-db-data:
+    external: false
+

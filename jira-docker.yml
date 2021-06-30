@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  jira:
+    build:
+      context: $CURRENT_PATH/..
+      dockerfile: Dockerfile
+    container_name: jira-db-test
+    depends_on:
+      - database
+    networks:
+      - jira-bridge
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - jira-db-data:/var/atlassian/application-data/jira
+    environment:
+      JVM_SUPPORT_RECOMMENDED_ARGS: ${COMMAND}
+
+networks:
+  jira-bridge:
+    driver: bridge
+
+volumes:
+  jira-db-data:
+    external: false
+  database-data:
+    external: false
