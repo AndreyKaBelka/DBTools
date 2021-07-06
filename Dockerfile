@@ -12,5 +12,5 @@ COPY ./scripts/entrypoint.sh /home
 
 RUN chmod +x /home/wait-for-it.sh
 RUN chmod +x /home/entrypoint.sh
-RUN echo ${DATABASE_PORT}
+
 CMD ["/home/entrypoint.sh"]
