@@ -19,6 +19,7 @@ services:
       - jira-db-data:/var/atlassian/application-data/jira
     environment:
       JVM_SUPPORT_RECOMMENDED_ARGS: ${COMMAND}
+      JVM_MAXIMUM_MEMORY: 4096m
     restart: on-failure
 
 networks:

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-source ./settings.sh
+source ./scripts/settings.sh
 
 function remove_containers() {
-  if [[ -n $DOCKER_PATH ]]; then
+  if [[ -n $CURRENT_PATH ]]; then
     docker-compose -f docker-temp.yml down --remove-orphans --volumes
     rm docker-temp.yml
   fi
@@ -34,7 +34,7 @@ while getopts "msophd" OPTION; do
     ;;
   p)
     export DOCKER_PATH="/postgres/"
-    export PORT=1521
+    export PORT=5432
     ;;
   d)
     export COMMAND="-Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n"
