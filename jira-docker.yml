@@ -7,6 +7,7 @@ services:
       args:
         JIRA_VERSION: ${JIRA_VERSION}
         PORT: ${PORT}
+    image: jira-db:latest
     container_name: jira-db-test
     depends_on:
       - database
