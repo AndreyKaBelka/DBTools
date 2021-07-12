@@ -18,8 +18,21 @@ if [ $# -eq 0 ]; then
   exit 0
 fi
 
-while getopts "msophd" OPTION; do
+while getopts "msophdv::" OPTION; do
   case $OPTION in
+  h)
+    echo "Usage:"
+    echo "start.sh -OPTION [-d] [-v] [-h]"
+    echo "OPTION:"
+    echo "   -m     to start mysql db"
+    echo "   -s     to start mssql db"
+    echo "   -p     to start postgres db"
+    echo "   -o     to start oracle db"
+    echo "-v     specify jira version. Default: 8.14"
+    echo "-h     help"
+    echo "-d     run into debug mode"
+    exit 0
+    ;;
   m)
     DOCKER_PATH="/mysql/"
     PORT=3306
@@ -39,17 +52,8 @@ while getopts "msophd" OPTION; do
   d)
     export COMMAND=$DEBUG_COMMAND
     ;;
-  h)
-    echo "Usage:"
-    echo "start.sh -OPTION [-d] [-h]"
-    echo "OPTION:"
-    echo "   -m     to start mysql db"
-    echo "   -s     to start mssql db"
-    echo "   -p     to start postgres db"
-    echo "   -o     to start oracle db"
-    echo "-h     help"
-    echo "-d     run into debug mode"
-    exit 0
+  v)
+    JIRA_VERSION=${OPTARG}
     ;;
   *)
     exit 0
@@ -61,6 +65,7 @@ function main() {
   export CURRENT_PATH="${CURRENT_PATH}${DOCKER_PATH}"
   cd "$CURRENT_PATH" || exit
   export PORT=$PORT
+  export JIRA_VERSION=${JIRA_VERSION}
   docker-compose -f ../jira-docker.yml -f docker-compose.yml config >docker-temp.yml
   docker-compose -f docker-temp.yml up --build
 }
