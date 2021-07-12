@@ -21,23 +21,23 @@ fi
 while getopts "msophd" OPTION; do
   case $OPTION in
   m)
-    export DOCKER_PATH="/mysql/"
-    export PORT=3306
+    DOCKER_PATH="/mysql/"
+    PORT=3306
     ;;
   s)
-    export DOCKER_PATH="/mssql/"
-    export PORT=1433
+    DOCKER_PATH="/mssql/"
+    PORT=1433
     ;;
   o)
-    export DOCKER_PATH="/oracle/"
-    export PORT=1521
+    DOCKER_PATH="/oracle/"
+    PORT=1521
     ;;
   p)
-    export DOCKER_PATH="/postgres/"
-    export PORT=5432
+    DOCKER_PATH="/postgres/"
+    PORT=5432
     ;;
   d)
-    export COMMAND="-Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n"
+    export COMMAND=$DEBUG_COMMAND
     ;;
   h)
     echo "Usage:"
@@ -60,6 +60,7 @@ done
 function main() {
   export CURRENT_PATH="${CURRENT_PATH}${DOCKER_PATH}"
   cd "$CURRENT_PATH" || exit
+  export PORT=$PORT
   docker-compose -f ../jira-docker.yml -f docker-compose.yml config >docker-temp.yml
   docker-compose -f docker-temp.yml up --build
 }
