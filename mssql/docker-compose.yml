@@ -1,6 +1,14 @@
 version: "3"
 
 services:
+  jira:
+    environment:
+      ATL_JDBC_URL: jdbc:sqlserver://;serverName=database;portNumber=1433;databaseName=jiradb
+      ATL_JDBC_USER: jiradbuser
+      ATL_JDBC_PASSWORD: SuperStrong123!
+      ATL_DB_DRIVER: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      ATL_DB_TYPE: mssql
+      ATL_DB_SCHEMA_NAME: jiraschema
   database:
     image: mcr.microsoft.com/mssql/server:2017-latest
     environment:

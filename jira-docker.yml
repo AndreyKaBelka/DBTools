@@ -4,6 +4,7 @@ services:
   jira:
     build:
       context: .
+      dockerfile: jira-dockerfile
       args:
         JIRA_VERSION: ${JIRA_VERSION}
         PORT: ${PORT}

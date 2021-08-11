@@ -14,10 +14,10 @@ CREATE SCHEMA jiraschema AUTHORIZATION jiradbuser;
 GO
 ALTER USER jiradbuser WITH DEFAULT_SCHEMA = jiraschema;
 GO
-GRANT SELECT ON jiradb TO jiradbuser;
-GRANT INSERT ON jiradb TO jiradbuser;
-GRANT UPDATE ON jiradb TO jiradbuser;
-GRANT DELETE ON jiradb TO jiradbuser;
+GRANT SELECT ON Database::jiradb TO jiradbuser;
+GRANT INSERT ON Database::jiradb TO jiradbuser;
+GRANT UPDATE ON Database::jiradb TO jiradbuser;
+GRANT DELETE ON Database::jiradb TO jiradbuser;
 GO
 SET NOCOUNT OFF;
 GO
